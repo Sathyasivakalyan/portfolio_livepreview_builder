@@ -241,44 +241,82 @@ export default function PortfolioBuilder({ onDataChange = () => {} } ) {
 
       <h3>🛠️ Projects (Works)</h3>
       {data.projects.map((proj, i) => (
-        <div key={i}>
-          <input
-            placeholder="Project Title"
-            value={proj.title}
-            onChange={(e) =>
-              handleArrayChange("projects", i, e.target.value, "title")
-            }
-          />
-          <input
-            placeholder="Description"
-            value={proj.description}
-            onChange={(e) =>
-              handleArrayChange("projects", i, e.target.value, "description")
-            }
-          />
-          <input
-            placeholder="Tech Used"
-            value={proj.tech}
-            onChange={(e) =>
-              handleArrayChange("projects", i, e.target.value, "tech")
-            }
-          />
-          <input
-            placeholder="Live Link"
-            value={proj.live}
-            onChange={(e) =>
-              handleArrayChange("projects", i, e.target.value, "live")
-            }
-          />
-          <input
-            placeholder="GitHub Link"
-            value={proj.github}
-            onChange={(e) =>
-              handleArrayChange("projects", i, e.target.value, "github")
-            }
-          />
-        </div>
-      ))}
+  <div key={i} className="mb-3 p-3 border rounded">
+    <input
+      className="form-control mb-2"
+      placeholder="Project Title"
+      value={proj.title}
+      onChange={(e) =>
+        handleArrayChange("projects", i, e.target.value, "title")
+      }
+    />
+    <input
+      className="form-control mb-2"
+      placeholder="Description"
+      value={proj.description}
+      onChange={(e) =>
+        handleArrayChange("projects", i, e.target.value, "description")
+      }
+    />
+    <input
+      className="form-control mb-2"
+      placeholder="Tech Used"
+      value={proj.tech}
+      onChange={(e) =>
+        handleArrayChange("projects", i, e.target.value, "tech")
+      }
+    />
+    <input
+      className="form-control mb-2"
+      placeholder="Live Link"
+      value={proj.live}
+      onChange={(e) =>
+        handleArrayChange("projects", i, e.target.value, "live")
+      }
+    />
+    <input
+      className="form-control mb-2"
+      placeholder="GitHub Link"
+      value={proj.github}
+      onChange={(e) =>
+        handleArrayChange("projects", i, e.target.value, "github")
+      }
+    />
+
+    <label className="form-label">Project Image</label>
+    <input
+      type="file"
+      accept="image/*"
+      className="form-control"
+      onChange={(e) => {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            const updatedProjects = [...data.projects];
+            updatedProjects[i] = {
+              ...updatedProjects[i],
+              image: reader.result,
+            };
+            setData({ ...data, projects: updatedProjects });
+            onDataChange({ ...data, projects: updatedProjects });
+          };
+          reader.readAsDataURL(file);
+        }
+      }}
+    />
+
+    {proj.image && (
+      <img
+        src={proj.image}
+        alt="Project Preview"
+        className="mt-2"
+        style={{ width: "100%", maxHeight: "180px", objectFit: "cover" }}
+      />
+    )}
+  </div>
+))}
+
       <button onClick={() => addItem("projects")}>Add Project</button>
     </div>
   );

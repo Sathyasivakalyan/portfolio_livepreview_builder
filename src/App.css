@@ -1476,4 +1476,54 @@ body {
 }
 #about{
   margin-left: 220px;
+}.project-image-container {
+  position: relative;
+  width: 100%;
+  height: 240px;
+  overflow: hidden;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  margin-bottom: 20px;
+}
+
+.project-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.project-image-container:hover .project-image {
+  transform: scale(1.05);
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.75);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  text-align: center;
+  color: white;
+}
+
+.project-image-container:hover .overlay {
+  opacity: 1;
+}
+
+.overlay-text h3 {
+  margin-bottom: 0.5rem;
+  font-size: 1.25rem;
+}
+
+.overlay-text p {
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
 }

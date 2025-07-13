@@ -167,23 +167,34 @@ export default function OpenNewWebsite({ data }) {
         <section id="portfolio" className="section">
           <h2>Projects</h2>
           <div className="portfolio-grid">
-            {data.projects?.map((proj, i) => (
-              <div key={i} className="portfolio-item">
-                <h3>{proj.title}</h3>
-                <p>{proj.description}</p>
-                <span>{proj.tech}</span>
-                <div>
-                  {proj.live && (
-                    <a href={proj.live} target="_blank" rel="noreferrer">Live</a>
-                  )}
-                  {" | "}
-                  {proj.github && (
-                    <a href={proj.github} target="_blank" rel="noreferrer">Code</a>
-                  )}
-                </div>
-              </div>
-            ))}
+  {data.projects?.map((proj, i) => (
+    <div key={i} className="portfolio-item project-image-container">
+      {proj.image && (
+        <img src={proj.image} alt={proj.title} className="project-image" />
+      )}
+      <div className="overlay">
+        <div className="overlay-text">
+          <h3>{proj.title}</h3>
+          <p>{proj.description}</p>
+          <span>{proj.tech}</span>
+          <div style={{ marginTop: "0.5rem" }}>
+            {proj.live && (
+              <a href={proj.live} target="_blank" rel="noreferrer" style={{ marginRight: "10px", color: "#fff", textDecoration: "underline" }}>
+                Live
+              </a>
+            )}
+            {proj.github && (
+              <a href={proj.github} target="_blank" rel="noreferrer" style={{ color: "#fff", textDecoration: "underline" }}>
+                Code
+              </a>
+            )}
           </div>
+        </div>
+      </div>
+    </div>
+  ))}
+</div>
+
         </section>
       </Section>
 
