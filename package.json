@@ -2,6 +2,7 @@
   "name": "portfolio_livepreview_builder",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://Sathyasivakalyan.github.io/portfolio_livepreview_builder",
   "dependencies": {
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
