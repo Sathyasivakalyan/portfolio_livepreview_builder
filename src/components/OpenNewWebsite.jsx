@@ -1,18 +1,38 @@
-// src/Components/OpenNewWebsite.jsx
+// src/components/OpenNewWebsite.jsx
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import "../App.css";
 
+// ----------------------------
+// Default data moved outside
+// ----------------------------
+const defaultData = {
+  name: "Your Name",
+  bio: "This is your bio",
+  profilePic: "/default-profile.png", // put default-profile.png inside public/
+  website: "https://example.com",
+  resume: "https://example.com/resume.pdf",
+  contact: {},
+  projects: [],
+  education: [],
+  experience: [],
+  awards: [],
+  skills: [],
+  testimonials: [],
+};
+
+// ----------------------------
 // Scroll to Top Button
+// ----------------------------
 const ScrollToTop = () => {
   const [visible, setVisible] = useState(false);
 
-  useEffect(() => {
-    const toggleVisible = () => {
-      const scrolled = document.documentElement.scrollTop;
-      setVisible(scrolled > 300);
-    };
+  const toggleVisible = () => {
+    const scrolled = document.documentElement.scrollTop;
+    setVisible(scrolled > 300);
+  };
 
+  useEffect(() => {
     window.addEventListener("scroll", toggleVisible);
     return () => window.removeEventListener("scroll", toggleVisible);
   }, []);
@@ -27,7 +47,9 @@ const ScrollToTop = () => {
   );
 };
 
+// ----------------------------
 // Motion Section Wrapper
+// ----------------------------
 const Section = ({ children, delay = 0 }) => (
   <motion.div
     initial={{ opacity: 0, y: 40 }}
@@ -39,38 +61,11 @@ const Section = ({ children, delay = 0 }) => (
   </motion.div>
 );
 
-export default function OpenNewWebsite() {
-  const STORAGE_KEY = "portfolioData";
-
-  // Default placeholders
-  const defaultData = {
-    name: "Your Name",
-    bio: "This is your bio",
-    profilePic: "/default-profile.png", // put inside public/
-    website: "https://example.com",
-    resume: "https://example.com/resume.pdf",
-    contact: {},
-    projects: [],
-    education: [],
-    experience: [],
-    awards: [],
-    skills: [],
-    testimonials: [],
-  };
-
-  const [d, setD] = useState(defaultData);
-
-  // 🔁 Load from localStorage when component mounts
-  useEffect(() => {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored) {
-      try {
-        setD({ ...defaultData, ...JSON.parse(stored) });
-      } catch (err) {
-        console.error("Error parsing stored portfolio data", err);
-      }
-    }
-  }, []);
+// ----------------------------
+// Main Component
+// ----------------------------
+export default function OpenNewWebsite({ data }) {
+  const d = { ...defaultData, ...data };
 
   const openExternalWebsite = (url) => {
     if (!url) return;
@@ -212,14 +207,7 @@ export default function OpenNewWebsite() {
                       {proj.live && (
                         <button
                           onClick={() => openExternalWebsite(proj.live)}
-                          style={{
-                            marginRight: "10px",
-                            color: "#fff",
-                            textDecoration: "underline",
-                            background: "none",
-                            border: "none",
-                            cursor: "pointer",
-                          }}
+                          style={{ marginRight: "10px", color: "#fff", textDecoration: "underline", background: "none", border: "none", cursor: "pointer" }}
                         >
                           Live
                         </button>
@@ -227,13 +215,7 @@ export default function OpenNewWebsite() {
                       {proj.github && (
                         <button
                           onClick={() => openExternalWebsite(proj.github)}
-                          style={{
-                            color: "#fff",
-                            textDecoration: "underline",
-                            background: "none",
-                            border: "none",
-                            cursor: "pointer",
-                          }}
+                          style={{ color: "#fff", textDecoration: "underline", background: "none", border: "none", cursor: "pointer" }}
                         >
                           Code
                         </button>
@@ -266,22 +248,8 @@ export default function OpenNewWebsite() {
           <h2>Contact</h2>
           {d.contact.email && <p><i className="fas fa-envelope"></i> {d.contact.email}</p>}
           {d.contact.phone && <p><i className="fas fa-phone"></i> {d.contact.phone}</p>}
-          {d.contact.github && (
-            <p>
-              <i className="fab fa-github"></i>{" "}
-              <a href={d.contact.github} target="_blank" rel="noreferrer">
-                {d.contact.github}
-              </a>
-            </p>
-          )}
-          {d.contact.linkedin && (
-            <p>
-              <i className="fab fa-linkedin"></i>{" "}
-              <a href={d.contact.linkedin} target="_blank" rel="noreferrer">
-                {d.contact.linkedin}
-              </a>
-            </p>
-          )}
+          {d.contact.github && <p><i className="fab fa-github"></i> <a href={d.contact.github} target="_blank" rel="noreferrer">{d.contact.github}</a></p>}
+          {d.contact.linkedin && <p><i className="fab fa-linkedin"></i> <a href={d.contact.linkedin} target="_blank" rel="noreferrer">{d.contact.linkedin}</a></p>}
           {d.resume && (
             <button className="cta-button resume-button" onClick={() => openExternalWebsite(d.resume)}>
               Download Resume
