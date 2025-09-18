@@ -1,3 +1,4 @@
+// src/App.js
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
@@ -10,7 +11,7 @@ import ThemeToggle from "./components/ThemeToggle";
 const STORAGE_KEY = "portfolioData";
 
 export default function App() {
-  // Load from localStorage
+  // ✅ Load from localStorage
   const getInitialData = () => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
@@ -31,15 +32,15 @@ export default function App() {
             },
             resume: "",
           };
-    } catch (err) {
-      console.error("Error reading localStorage", err);
+    } catch (e) {
+      console.error("Error reading localStorage:", e);
       return {};
     }
   };
 
   const [data, setData] = useState(getInitialData);
 
-  // 🔁 Save to localStorage on every update
+  // ✅ Save to localStorage on every update
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
   }, [data]);
@@ -76,9 +77,7 @@ export default function App() {
                     borderRadius: "10px",
                   }}
                 >
-                  <h2 style={{ textAlign: "center" }}>
-                    🛠️ Build Your Portfolio
-                  </h2>
+                  <h2 style={{ textAlign: "center" }}>🛠️ Build Your Portfolio</h2>
                   <PortfolioBuilder data={data} onDataChange={setData} />
                 </div>
 
@@ -118,7 +117,10 @@ export default function App() {
         />
 
         {/* Final Website */}
-        <Route path="/opennewwebsite" element={<OpenNewWebsite />} />
+        <Route
+          path="/opennewwebsite"
+          element={<OpenNewWebsite />}
+        />
       </Routes>
     </Router>
   );
