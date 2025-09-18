@@ -5,15 +5,28 @@ export default function PortfolioPreview({ data }) {
   const {
     profilePic,
     resume,
-    name,
-    bio,
+    name = "Your Name",
+    bio = "This is your short bio...",
     contact = {},
     education = [],
     experience = [],
     awards = [],
     skills = [],
     projects = [],
-  } = data;
+  } = data || {};
+
+  const openFullPortfolio = () => {
+    if (data) {
+      localStorage.setItem("portfolioData", JSON.stringify(data));
+      // ✅ Works both on localhost and Netlify
+      window.open("/opennewwebsite", "_blank", "noopener,noreferrer");
+    }
+  };
+
+  const formatUrl = (url) => {
+    if (!url) return null;
+    return url.startsWith("http") ? url : `https://${url}`;
+  };
 
   return (
     <div
@@ -28,7 +41,10 @@ export default function PortfolioPreview({ data }) {
     >
       {/* Profile Section */}
       {profilePic && (
-        <div className="profile-pic-container" style={{ textAlign: "center", marginBottom: "1rem" }}>
+        <div
+          className="profile-pic-container"
+          style={{ textAlign: "center", marginBottom: "1rem" }}
+        >
           <img
             src={profilePic}
             alt="Profile"
@@ -45,16 +61,20 @@ export default function PortfolioPreview({ data }) {
       )}
 
       <h2 style={{ textAlign: "center" }}>{name}</h2>
-      <p style={{ textAlign: "center", maxWidth: "600px", margin: "auto" }}>{bio}</p>
+      <p style={{ textAlign: "center", maxWidth: "600px", margin: "auto" }}>
+        {bio}
+      </p>
 
       {/* Skills */}
       {skills.length > 0 && (
         <>
           <h3>🧠 Skills</h3>
           <ul>
-            {Array.isArray(skills)
-              ? skills.map((skill, idx) => <li key={idx}>{skill}</li>)
-              : skills.split(",").map((skill, idx) => <li key={idx}>{skill.trim()}</li>)}
+            {(Array.isArray(skills) ? skills : skills.split(",")).map(
+              (skill, idx) => (
+                <li key={idx}>{skill.trim()}</li>
+              )
+            )}
           </ul>
         </>
       )}
@@ -109,19 +129,33 @@ export default function PortfolioPreview({ data }) {
             {projects.map((proj, idx) => (
               <li key={idx} style={{ marginBottom: "1rem" }}>
                 <div className="project">
-                  <strong>Title:</strong> {proj.title}<br />
-                  <strong>Description:</strong> {proj.description}<br />
-                  {proj.tech && <div><strong>Tech:</strong> {proj.tech}</div>}
+                  <strong>Title:</strong> {proj.title}
+                  <br />
+                  <strong>Description:</strong> {proj.description}
+                  <br />
+                  {proj.tech && (
+                    <div>
+                      <strong>Tech:</strong> {proj.tech}
+                    </div>
+                  )}
                   {proj.live && (
                     <div>
-                      <a href={proj.live} target="_blank" rel="noreferrer">
+                      <a
+                        href={formatUrl(proj.live)}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
                         🔗 Live
                       </a>
                     </div>
                   )}
                   {proj.github && (
                     <div>
-                      <a href={proj.github} target="_blank" rel="noreferrer">
+                      <a
+                        href={formatUrl(proj.github)}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
                         🐙 GitHub
                       </a>
                     </div>
@@ -140,27 +174,53 @@ export default function PortfolioPreview({ data }) {
         {contact.phone && <li>📞 {contact.phone}</li>}
         {contact.github && (
           <li>
-            <a href={contact.github} target="_blank" rel="noreferrer">GitHub</a>
+            <a href={formatUrl(contact.github)} target="_blank" rel="noreferrer">
+              GitHub
+            </a>
           </li>
         )}
         {contact.linkedin && (
           <li>
-            <a href={contact.linkedin} target="_blank" rel="noreferrer">LinkedIn</a>
+            <a
+              href={formatUrl(contact.linkedin)}
+              target="_blank"
+              rel="noreferrer"
+            >
+              LinkedIn
+            </a>
           </li>
         )}
         {contact.twitter && (
           <li>
-            <a href={contact.twitter} target="_blank" rel="noreferrer">Twitter</a>
+            <a
+              href={formatUrl(contact.twitter)}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Twitter
+            </a>
           </li>
         )}
         {contact.instagram && (
           <li>
-            <a href={contact.instagram} target="_blank" rel="noreferrer">Instagram</a>
+            <a
+              href={formatUrl(contact.instagram)}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Instagram
+            </a>
           </li>
         )}
         {contact.facebook && (
           <li>
-            <a href={contact.facebook} target="_blank" rel="noreferrer">Facebook</a>
+            <a
+              href={formatUrl(contact.facebook)}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Facebook
+            </a>
           </li>
         )}
       </ul>
@@ -168,7 +228,7 @@ export default function PortfolioPreview({ data }) {
       {/* Resume */}
       {resume && (
         <div style={{ marginTop: "1rem" }}>
-          <a href={resume} target="_blank" rel="noreferrer">
+          <a href={formatUrl(resume)} target="_blank" rel="noreferrer">
             📄 View Resume
           </a>
         </div>
@@ -177,11 +237,8 @@ export default function PortfolioPreview({ data }) {
       {/* View Full Button */}
       <div style={{ marginTop: "2rem", textAlign: "center" }}>
         <button
-          onClick={() => {
-            localStorage.setItem("portfolioData", JSON.stringify(data));
-            window.open("/opennewwebsite", "_blank");
-          }}
-          className="bg-blue-500 text-white px-4 py-2 rounded"
+          onClick={openFullPortfolio}
+          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg shadow-md transition duration-300"
         >
           View Full Portfolio ↗
         </button>

@@ -7,12 +7,12 @@ import "../App.css";
 const ScrollToTop = () => {
   const [visible, setVisible] = useState(false);
 
-  const toggleVisible = () => {
-    const scrolled = document.documentElement.scrollTop;
-    setVisible(scrolled > 300);
-  };
-
   useEffect(() => {
+    const toggleVisible = () => {
+      const scrolled = document.documentElement.scrollTop;
+      setVisible(scrolled > 300);
+    };
+
     window.addEventListener("scroll", toggleVisible);
     return () => window.removeEventListener("scroll", toggleVisible);
   }, []);
@@ -39,18 +39,15 @@ const Section = ({ children, delay = 0 }) => (
   </motion.div>
 );
 
-// Main Component
-export default function OpenNewWebsite({ data }) {
-  const openExternalWebsite = (url) => {
-    if (url) window.open(url.startsWith("http") ? url : `https://${url}`, "_blank", "noopener,noreferrer");
-  };
+export default function OpenNewWebsite() {
+  const STORAGE_KEY = "portfolioData";
 
-  // Default placeholders if data is missing
+  // Default placeholders
   const defaultData = {
     name: "Your Name",
     bio: "This is your bio",
-    profilePic: "/default-profile.png",
-    website: "",
+    profilePic: "/default-profile.png", // put inside public/
+    website: "https://example.com",
     resume: "https://example.com/resume.pdf",
     contact: {},
     projects: [],
@@ -61,7 +58,25 @@ export default function OpenNewWebsite({ data }) {
     testimonials: [],
   };
 
-  const d = { ...defaultData, ...data };
+  const [d, setD] = useState(defaultData);
+
+  // 🔁 Load from localStorage when component mounts
+  useEffect(() => {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      try {
+        setD({ ...defaultData, ...JSON.parse(stored) });
+      } catch (err) {
+        console.error("Error parsing stored portfolio data", err);
+      }
+    }
+  }, []);
+
+  const openExternalWebsite = (url) => {
+    if (!url) return;
+    const finalUrl = url.startsWith("http") ? url : `https://${url}`;
+    window.open(finalUrl, "_blank", "noopener,noreferrer");
+  };
 
   return (
     <div style={{ backgroundColor: "#000", color: "#fff", minHeight: "100vh" }}>
@@ -197,7 +212,14 @@ export default function OpenNewWebsite({ data }) {
                       {proj.live && (
                         <button
                           onClick={() => openExternalWebsite(proj.live)}
-                          style={{ marginRight: "10px", color: "#fff", textDecoration: "underline", background: "none", border: "none", cursor: "pointer" }}
+                          style={{
+                            marginRight: "10px",
+                            color: "#fff",
+                            textDecoration: "underline",
+                            background: "none",
+                            border: "none",
+                            cursor: "pointer",
+                          }}
                         >
                           Live
                         </button>
@@ -205,7 +227,13 @@ export default function OpenNewWebsite({ data }) {
                       {proj.github && (
                         <button
                           onClick={() => openExternalWebsite(proj.github)}
-                          style={{ color: "#fff", textDecoration: "underline", background: "none", border: "none", cursor: "pointer" }}
+                          style={{
+                            color: "#fff",
+                            textDecoration: "underline",
+                            background: "none",
+                            border: "none",
+                            cursor: "pointer",
+                          }}
                         >
                           Code
                         </button>
@@ -238,8 +266,22 @@ export default function OpenNewWebsite({ data }) {
           <h2>Contact</h2>
           {d.contact.email && <p><i className="fas fa-envelope"></i> {d.contact.email}</p>}
           {d.contact.phone && <p><i className="fas fa-phone"></i> {d.contact.phone}</p>}
-          {d.contact.github && <p><i className="fab fa-github"></i> <a href={d.contact.github} target="_blank" rel="noreferrer">{d.contact.github}</a></p>}
-          {d.contact.linkedin && <p><i className="fab fa-linkedin"></i> <a href={d.contact.linkedin} target="_blank" rel="noreferrer">{d.contact.linkedin}</a></p>}
+          {d.contact.github && (
+            <p>
+              <i className="fab fa-github"></i>{" "}
+              <a href={d.contact.github} target="_blank" rel="noreferrer">
+                {d.contact.github}
+              </a>
+            </p>
+          )}
+          {d.contact.linkedin && (
+            <p>
+              <i className="fab fa-linkedin"></i>{" "}
+              <a href={d.contact.linkedin} target="_blank" rel="noreferrer">
+                {d.contact.linkedin}
+              </a>
+            </p>
+          )}
           {d.resume && (
             <button className="cta-button resume-button" onClick={() => openExternalWebsite(d.resume)}>
               Download Resume

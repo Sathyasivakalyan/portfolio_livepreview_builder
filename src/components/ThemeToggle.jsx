@@ -21,7 +21,7 @@ export default function ThemeToggle() {
     <div className="theme-toggle">
       <button
         onClick={() => setIsDark((prev) => !prev)}
-        className="toggle-btn"
+        className={`toggle-btn ${isDark ? "dark-active" : "light-active"}`}
       >
         {isDark ? "🌙 Dark Mode" : "☀️ Light Mode"}
       </button>

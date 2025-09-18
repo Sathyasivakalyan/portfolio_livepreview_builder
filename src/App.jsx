@@ -12,24 +12,29 @@ const STORAGE_KEY = "portfolioData";
 export default function App() {
   // Load from localStorage
   const getInitialData = () => {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    return stored
-      ? JSON.parse(stored)
-      : {
-          name: "",
-          bio: "",
-          profilePic: "",
-          backgroundPic: "",
-          skills: [],
-          projects: [],
-          contact: {
-            github: "",
-            email: "",
-            linkedin: "",
-            phone: "",
-          },
-          resume: ""
-        };
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      return stored
+        ? JSON.parse(stored)
+        : {
+            name: "",
+            bio: "",
+            profilePic: "",
+            backgroundPic: "",
+            skills: [],
+            projects: [],
+            contact: {
+              github: "",
+              email: "",
+              linkedin: "",
+              phone: "",
+            },
+            resume: "",
+          };
+    } catch (err) {
+      console.error("Error reading localStorage", err);
+      return {};
+    }
   };
 
   const [data, setData] = useState(getInitialData);
@@ -48,17 +53,46 @@ export default function App() {
           element={
             <div className="app">
               <ThemeToggle />
-              <h1 style={{ textAlign: "center", marginBottom: "1rem" }}>⚒️ Portfolio Builder</h1>
+              <h1 style={{ textAlign: "center", marginBottom: "1rem" }}>
+                ⚒️ Portfolio Builder
+              </h1>
 
-              <div className="container" style={{ display: "flex", flexWrap: "wrap", gap: "2rem", padding: "1rem" }}>
+              <div
+                className="container"
+                style={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: "2rem",
+                  padding: "1rem",
+                }}
+              >
                 {/* Builder */}
-                <div style={{ flex: 1, minWidth: "350px", background: "#f9f9f9", padding: "1rem", borderRadius: "10px" }}>
-                  <h2 style={{ textAlign: "center" }}>🛠️ Build Your Portfolio</h2>
+                <div
+                  style={{
+                    flex: 1,
+                    minWidth: "350px",
+                    background: "#f9f9f9",
+                    padding: "1rem",
+                    borderRadius: "10px",
+                  }}
+                >
+                  <h2 style={{ textAlign: "center" }}>
+                    🛠️ Build Your Portfolio
+                  </h2>
                   <PortfolioBuilder data={data} onDataChange={setData} />
                 </div>
 
                 {/* Live Preview */}
-                <div style={{ flex: 1, minWidth: "350px", background: "#222", padding: "1rem", borderRadius: "10px", color: "white" }}>
+                <div
+                  style={{
+                    flex: 1,
+                    minWidth: "350px",
+                    background: "#222",
+                    padding: "1rem",
+                    borderRadius: "10px",
+                    color: "white",
+                  }}
+                >
                   <h2 style={{ textAlign: "center" }}>👀 Live Preview</h2>
                   <PortfolioPreview data={data} />
                 </div>
@@ -67,7 +101,14 @@ export default function App() {
               {/* Link to final site */}
               <div style={{ textAlign: "center", marginTop: "2rem" }}>
                 <Link to="/opennewwebsite" target="_blank" rel="noreferrer">
-                  <button style={{ padding: "10px 20px", fontSize: "16px", borderRadius: "6px", cursor: "pointer" }}>
+                  <button
+                    style={{
+                      padding: "10px 20px",
+                      fontSize: "16px",
+                      borderRadius: "6px",
+                      cursor: "pointer",
+                    }}
+                  >
                     🌐 Open Final Portfolio Website
                   </button>
                 </Link>
@@ -77,10 +118,7 @@ export default function App() {
         />
 
         {/* Final Website */}
-        <Route
-          path="/opennewwebsite"
-          element={<OpenNewWebsite data={getInitialData()} />}
-        />
+        <Route path="/opennewwebsite" element={<OpenNewWebsite />} />
       </Routes>
     </Router>
   );
