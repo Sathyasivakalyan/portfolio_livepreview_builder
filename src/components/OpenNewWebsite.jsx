@@ -50,7 +50,7 @@ export default function OpenNewWebsite({ data }) {
     name: "Your Name",
     bio: "This is your bio",
     profilePic: "/default-profile.png",
-    website: "https://my-other-project.netlify.app",
+    website: "",
     resume: "https://example.com/resume.pdf",
     contact: {},
     projects: [],
